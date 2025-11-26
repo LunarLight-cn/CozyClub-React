@@ -1,9 +1,9 @@
-# CozyClub-React
-react learning ground
+## CozyClub-React
+React Learning Ground!!!
 
 The source code for this project is distributed under the **MIT License**. See the `LICENSE` file for more information.
 
-## ⚠️ Disclaimer Regarding Image Assets
+## Disclaimer Regarding Image Assets
 
 This project includes AI-generated images and visual assets collected from public internet sources. These assets are used solely for **demonstration and placeholder purposes**.
 

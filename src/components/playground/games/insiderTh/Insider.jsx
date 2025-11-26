@@ -1,5 +1,5 @@
 import React from 'react'
-import styleInsider from './styleInsider'
+import './styleInsider.css';
 
 const Insider = () => {
   return (

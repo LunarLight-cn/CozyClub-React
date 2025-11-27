@@ -1,5 +1,106 @@
 @import "tailwindcss";
+@layer base {
+  * {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+}
 
 :root {
   --font-poppins: "Poppins", sans-serif;
+  --white-color: #fff;
+  --dark-color: #252525;
+  --primary-color: #3b141c;
+  --secondary-color: #f3961c;
+  --light-pink-color: #faf4f5;
+  --meditm-gray-color: #ccc;
+
+
+  --sunlit-clay-50: #fcf4e9;
+  --sunlit-clay-100: #f9e9d2;
+  --sunlit-clay-200: #f2d4a6;
+  --sunlit-clay-300: #ecbe79;
+  --sunlit-clay-400: #e6a84c;
+  --sunlit-clay-500: #df9320;
+  --sunlit-clay-600: #b37519;
+  --sunlit-clay-700: #865813;
+  --sunlit-clay-800: #593b0d;
+  --sunlit-clay-900: #2d1d06;
+  --sunlit-clay-950: #1f1504;
+
+  --rusty-spice-50: #faefeb;
+  --rusty-spice-100: #f4dfd7;
+  --rusty-spice-200: #e9bfaf;
+  --rusty-spice-300: #dea087;
+  --rusty-spice-400: #d3805f;
+  --rusty-spice-500: #c86037;
+  --rusty-spice-600: #a04d2c;
+  --rusty-spice-700: #783a21;
+  --rusty-spice-800: #502616;
+  --rusty-spice-900: #28130b;
+  --rusty-spice-950: #1c0d08;
+
+  --lemon-chiffon-50: #fdfae8;
+  --lemon-chiffon-100: #faf4d1;
+  --lemon-chiffon-200: #f6e9a2;
+  --lemon-chiffon-300: #f1de74;
+  --lemon-chiffon-400: #edd445;
+  --lemon-chiffon-500: #e8c917;
+  --lemon-chiffon-600: #baa112;
+  --lemon-chiffon-700: #8b780e;
+  --lemon-chiffon-800: #5d5009;
+  --lemon-chiffon-900: #2e2805;
+  --lemon-chiffon-950: #201c03;
+
+  --toffee-brown-50: #f7f1ed;
+  --toffee-brown-100: #f0e3db;
+  --toffee-brown-200: #e1c8b7;
+  --toffee-brown-300: #d2ac93;
+  --toffee-brown-400: #c3916f;
+  --toffee-brown-500: #b4754b;
+  --toffee-brown-600: #905e3c;
+  --toffee-brown-700: #6c462d;
+  --toffee-brown-800: #482f1e;
+  --toffee-brown-900: #24170f;
+  --toffee-brown-950: #19100b;
+
+  --shadow-grey-50: #f4f2f0;
+  --shadow-grey-100: #e9e4e2;
+  --shadow-grey-200: #d4cac4;
+  --shadow-grey-300: #beafa7;
+  --shadow-grey-400: #a8958a;
+  --shadow-grey-500: #937a6c;
+  --shadow-grey-600: #756257;
+  --shadow-grey-700: #584941;
+  --shadow-grey-800: #3b312b;
+  --shadow-grey-900: #1d1816;
+  --shadow-grey-950: #15110f;
+
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url(/src/assets/cozy-home.jpg) no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img {
+  width: 100%;
 }

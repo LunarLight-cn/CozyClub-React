@@ -1,8 +1,6 @@
 import React from "react";
 
 const Contact = () => {
-  const emailAddress = "lunarlight.cn@gmail.com";
-  const githubUsername = "LunarLight-cn";
 
   return (
     <div className="flex justify-center my-20 mx-32 min-h-150 bg-[#e1c8b7]/85 rounded-4xl">

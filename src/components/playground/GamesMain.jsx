@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 
 import "./styleGamesMain.css";
 
-import cozyCat from "../../assets/insider-cov.png";
+import cozyCat from "../../assets/the-riddle-cov.png";
 import cozyTown from "../../assets/cozy-town.jpg";
 
 const GamesMain = () => {
   const games = [
     {
       id: 1,
-      title: "Insider",
+      title: "The Riddle",
       desc: "Someone is controlling the conversation. Can you find them?",
       image: cozyCat,
-      link: "/games/insider",
+      link: "/games/riddle",
       active: true,
     },
     {

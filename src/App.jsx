@@ -5,7 +5,7 @@ import Hero from "./components/Hero";
 import Contact from "./components/Contact";
 import About from "./components/About";
 import GamesMain from "./components/playground/GamesMain";
-import Insider from "./components/playground/games/insiderTh/Insider";
+import Riddle from "./components/playground/games/theRiddle/Riddle";
 
 import Navbar from "./components/Navbar";
 import SignInModal from "./components/SignInModal";
@@ -26,7 +26,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/games" element={<GamesMain />} />
-          <Route path="/games/insider" element={<Insider />} />
+          <Route path="/games/riddle" element={<Riddle />} />
         </Routes>
 
         {/* <Hero /> */}

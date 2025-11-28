@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./styleInsider.css";
+import "./styleRiddle.css";
 
-const Insider = () => {
-  const [view, setView] = useState("menu"); // menu | lobby
-  const [menuState, setMenuState] = useState("default"); // default | join
+// Edit Game / Role name here
+const GAME_CONFIG = {
+  NAME: "THE RIDDLE",
+  ROLES: {
+    KEEPER: "Keeper",
+    SEEKER: "Seeker",
+    PRETENDER: "Pretender"
+  }
+};
+
+const Riddle = () => {
+  const [view, setView] = useState("menu"); 
+  const [menuState, setMenuState] = useState("default");
   const [playerName, setPlayerName] = useState("");
   const [roomCode, setRoomCode] = useState("");
   const [joinCode, setJoinCode] = useState("");
 
-  // Create Lobby
   const handleCreateLobby = () => {
     if (!playerName) return alert("Please enter your name!");
     const mockCode = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -17,7 +26,6 @@ const Insider = () => {
     setView("lobby");
   };
 
-  // Join Lobby
   const handleJoinLobby = () => {
     if (!playerName) return alert("Please enter your name!");
     if (!joinCode) return alert("Please enter lobby code!");
@@ -28,7 +36,7 @@ const Insider = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] flex justify-center items-center p-4">
       <div className="bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-3xl border border-white/20 shadow-2xl w-full max-w-6xl animate-fade-in-up text-white relative flex flex-col min-h-[600px]">
-        {/* Return btn (Top Left - Keep as fallback) */}
+        
         <Link
           to="/games"
           className="absolute top-6 left-6 text-gray-300 hover:text-white transition-colors z-10"
@@ -36,9 +44,9 @@ const Insider = () => {
           <i className="bx bx-arrow-back text-2xl"></i>
         </Link>
 
-        {/* --- MENU VIEW --- */}
         {view === "menu" && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 h-full grow">
+            
             {/* --- LEFT COLUMN: Rules --- */}
             <div className="flex flex-col h-full">
               <div className="bg-white/10 rounded-2xl p-6 h-full border border-white/10 overflow-y-auto custom-scrollbar shadow-inner backdrop-blur-sm">
@@ -54,9 +62,10 @@ const Insider = () => {
                         Random Roles
                       </strong>
                       Everyone receives a random role:{" "}
-                      <strong className="text-amber-300">Master</strong>,{" "}
-                      <strong className="text-red-400">Insider</strong>, or{" "}
-                      <strong className="text-green-300">Commons</strong>.
+                      {/* call role var */}
+                      <strong className="text-amber-300">{GAME_CONFIG.ROLES.KEEPER}</strong>,{" "}
+                      <strong className="text-red-400">{GAME_CONFIG.ROLES.PRETENDER}</strong>, or{" "}
+                      <strong className="text-green-300">{GAME_CONFIG.ROLES.SEEKER}</strong>.
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -65,21 +74,20 @@ const Insider = () => {
                       <strong className="text-white block mb-1 text-lg">
                         Who is who?
                       </strong>
-                      Everyone knows the{" "}
-                      <strong className="text-amber-300">Master</strong>, but
-                      the <strong className="text-red-400">Insider</strong> is
+                      Everyone knows the <strong className="text-amber-300">{GAME_CONFIG.ROLES.KEEPER}</strong>, but
+                      the <strong className="text-red-400">{GAME_CONFIG.ROLES.PRETENDER}</strong> is
                       secret.
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <i className="bx  bxs-message-bubble-question-mark text-[#f3961c] mt-1 shrink-0 text-xl"></i>
+                    <i className="bx bxs-message-bubble-question-mark text-[#f3961c] mt-1 shrink-0 text-xl"></i>
                     <span>
                       <strong className="text-white block mb-1 text-lg">
                         Find the Riddle
                       </strong>
-                      The <strong className="text-amber-300">Master</strong>{" "}
+                      The <strong className="text-amber-300">{GAME_CONFIG.ROLES.KEEPER}</strong>{" "}
                       answers "Yes/No".{" "}
-                      <strong className="text-green-300">Everyone else</strong>{" "}
+                      <strong className="text-green-300">{GAME_CONFIG.ROLES.SEEKER}s</strong>{" "}
                       ask questions to find the secret word.
                     </span>
                   </li>
@@ -87,7 +95,7 @@ const Insider = () => {
                     <i className="bx bxs-mask text-[#f3961c] mt-1 shrink-0 text-xl"></i>
                     <span>
                       <strong className="text-white block mb-1 text-lg">
-                        The Insider
+                        The {GAME_CONFIG.ROLES.PRETENDER}
                       </strong>
                       Knows the secret! They must guide others without being
                       caught.
@@ -99,19 +107,19 @@ const Insider = () => {
                       <strong className="text-white block mb-1 text-lg">
                         Win Condition
                       </strong>
-                      After finding the word, vote for the Insider!
+                      After finding the word, vote for the {GAME_CONFIG.ROLES.PRETENDER}!
                       <ul className="list-disc list-inside mt-2 text-gray-300 space-y-1 ml-1">
                         <li>
-                          Catch Insider:{" "}
-                          <strong className="text-green-300">Commons</strong>{" "}
+                          Catch {GAME_CONFIG.ROLES.PRETENDER}:{" "}
+                          <strong className="text-green-300">{GAME_CONFIG.ROLES.SEEKER}</strong>{" "}
                           Win
                         </li>
                         <li>
                           Fail to catch:{" "}
-                          <strong className="text-red-400">Insider</strong> Wins
+                          <strong className="text-red-400">{GAME_CONFIG.ROLES.PRETENDER}</strong> Wins
                         </li>
                       </ul>
-                      <p className="text-xs2 text-gray-400 mt-2 italic">
+                      <p className="text-xs text-gray-400 mt-2 italic">
                         *If time runs out, everyone loses.
                       </p>
                     </div>
@@ -123,15 +131,15 @@ const Insider = () => {
             {/* --- RIGHT COLUMN: UI --- */}
             <div className="flex flex-col justify-center items-center text-center space-y-8 py-4">
               <div className="space-y-2">
-                <h1 className="text-6xl md:text-7xl font-extrabold text-[#f3961c] drop-shadow-xl tracking-wider">
-                  INSIDER
+                {/* use game name from var */}
+                <h1 className="text-6xl md:text-7xl font-extrabold text-[#f3961c] drop-shadow-xl tracking-wider uppercase">
+                  {GAME_CONFIG.NAME}
                 </h1>
                 <p className="text-gray-300 text-lg font-light">
-                  Find the truth. Expose the liar.
+                  Find the truth. Expose the Pretender.
                 </p>
               </div>
 
-              {/* Nickname Input */}
               <div className="w-full max-w-md space-y-2">
                 <label className="block text-left text-sm font-light ml-2 text-gray-300">
                   YOUR NICKNAME
@@ -150,15 +158,12 @@ const Insider = () => {
 
               <div className="w-full max-w-md border-t border-white/10"></div>
 
-              {/* --- ACTION BUTTONS AREA --- */}
               <div className="w-full max-w-md grid grid-cols-1 gap-4 min-h-[140px]">
-                {/* STATE: DEFAULT MENU */}
                 {menuState === "default" && (
                   <div className="grid gap-4 animate-fade-in">
-                    {/* Create Lobby */}
                     <button
                       onClick={handleCreateLobby}
-                      className="group relative w-full bg-linear-to-r from-[#f3961c] to-[#d88210] hover:brightness-110 py-4 rounded-2xl font-bold text-xl shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 overflow-hidden"
+                      className="group relative w-full bg-linear-to-r from-[#f3961c] to-[#d88210] hover:brightness-110 py-4 rounded-2xl font-bold text-xl shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 overflow-hidden cursor-pointer"
                     >
                       <span className="relative z-10 flex items-center justify-center gap-3">
                         <i className="bx bxs-plus-square text-2xl"></i> CREATE
@@ -168,7 +173,6 @@ const Insider = () => {
                     </button>
 
                     <div className="flex gap-3">
-                      {/* Leave / Back Button */}
                       <Link
                         to="/games"
                         className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-red-400/50 hover:text-red-300 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 text-gray-400"
@@ -176,10 +180,9 @@ const Insider = () => {
                         LEAVE
                       </Link>
 
-                      {/* Join with Code Button */}
                       <button
                         onClick={() => setMenuState("join")}
-                        className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-green-400/50 hover:text-green-300 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 text-gray-400"
+                        className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-green-400/50 hover:text-green-300 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 text-gray-400 cursor-pointer"
                       >
                         JOIN WITH CODE <i className="bx bxs-key text-2xl"></i>
                       </button>
@@ -187,12 +190,8 @@ const Insider = () => {
                   </div>
                 )}
 
-                
-
-                {/* STATE: JOIN WITH CODE */}
                 {menuState === "join" && (
                   <div className="grid gap-4 animate-fade-in">
-                    {/* Code Input */}
                     <div className="relative">
                       <input
                         type="text"
@@ -206,7 +205,6 @@ const Insider = () => {
                     </div>
 
                     <div className="flex gap-3">
-                      {/* Back to Menu Button */}
                       <button
                         onClick={() => setMenuState("default")}
                         className="w-1/3 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/30 rounded-2xl font-bold text-lg transition-all cursor-pointer flex items-center justify-center gap-2 text-gray-400 hover:text-white"
@@ -214,7 +212,6 @@ const Insider = () => {
                         <i className="bx bx-undo text-xl"></i> BACK
                       </button>
 
-                      {/* Confirm Join Button */}
                       <button
                         onClick={handleJoinLobby}
                         className="w-2/3 bg-linear-to-r from-[#f3961c] to-[#d88210] hover:brightness-110 border-2 border-transparent rounded-2xl font-bold text-lg transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg hover:-translate-y-1 active:scale-95"
@@ -230,7 +227,6 @@ const Insider = () => {
           </div>
         )}
 
-        {/* --- LOBBY VIEW --- */}
         {view === "lobby" && (
           <div className="flex flex-col items-center justify-center text-center space-y-8 grow animate-fade-in">
             <div className="space-y-3">
@@ -247,7 +243,6 @@ const Insider = () => {
               </div>
             </div>
 
-            {/* Player List */}
             <div className="w-full max-w-3xl bg-white/5 rounded-3xl p-8 min-h-[250px] border border-white/10">
               <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-6">
                 <h3 className="text-2xl text-gray-200 font-semibold flex items-center gap-2">
@@ -275,7 +270,6 @@ const Insider = () => {
               </div>
             </div>
 
-            {/* Footer Buttons */}
             <div className="flex gap-4 w-full max-w-3xl mt-auto">
               <button
                 onClick={() => setView("menu")}
@@ -294,4 +288,4 @@ const Insider = () => {
   );
 };
 
-export default Insider;
+export default Riddle;

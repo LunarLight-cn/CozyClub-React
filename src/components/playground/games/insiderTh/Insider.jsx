@@ -4,198 +4,286 @@ import "./styleInsider.css";
 
 const Insider = () => {
   const [view, setView] = useState("menu"); // menu | lobby
+  const [menuState, setMenuState] = useState("default"); // default | join
   const [playerName, setPlayerName] = useState("");
   const [roomCode, setRoomCode] = useState("");
   const [joinCode, setJoinCode] = useState("");
 
-  // Create Game Lobby
-  const handleCreateRoom = () => {
+  // Create Lobby
+  const handleCreateLobby = () => {
     if (!playerName) return alert("Please enter your name!");
     const mockCode = Math.random().toString(36).substring(2, 8).toUpperCase();
     setRoomCode(mockCode);
     setView("lobby");
   };
 
-  // Join Game Lobby
-  const handleJoinRoom = () => {
+  // Join Lobby
+  const handleJoinLobby = () => {
     if (!playerName) return alert("Please enter your name!");
-    if (!joinCode) return alert("Please enter room code!");
+    if (!joinCode) return alert("Please enter lobby code!");
     setRoomCode(joinCode.toUpperCase());
     setView("lobby");
   };
 
   return (
     <div className="min-h-[calc(100vh-80px)] flex justify-center items-center p-4">
-      {/* Container */}
-      <div className="bg-black/40 backdrop-blur-md p-8 md:p-12 rounded-3xl border border-white/20 shadow-2xl w-full max-w-2xl animate-fade-in-up text-white relative">
-        {/* Return btn */}
+      <div className="bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-3xl border border-white/20 shadow-2xl w-full max-w-6xl animate-fade-in-up text-white relative flex flex-col min-h-[600px]">
+        {/* Return btn (Top Left - Keep as fallback) */}
         <Link
           to="/games"
-          className="absolute top-6 left-6 text-gray-300 hover:text-white transition-colors"
+          className="absolute top-6 left-6 text-gray-300 hover:text-white transition-colors z-10"
         >
           <i className="bx bx-arrow-back text-2xl"></i>
         </Link>
 
-        {/* Menu View */}
-        {view == "menu" && (
-          <div className="flex flex-col items-center text-center space-y-6">
-            <h1 className="text-5xl font-bold text-[#f3961c] drop-shadow-md tracking-wider">
-              INSIDER
-            </h1>
+        {/* --- MENU VIEW --- */}
+        {view === "menu" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 h-full grow">
+            {/* --- LEFT COLUMN: Rules --- */}
+            <div className="flex flex-col h-full">
+              <div className="bg-white/10 rounded-2xl p-6 h-full border border-white/10 overflow-y-auto custom-scrollbar shadow-inner backdrop-blur-sm">
+                <h3 className="text-2xl font-bold mb-6 text-[#f3961c] flex items-center gap-2 border-b border-white/10 pb-4 sticky top-0 bg-transparent">
+                  <i className="bx bxs-book-content"></i> Game Rules
+                </h3>
 
-            {/* Rules */}
-            <div className="bg-white/10 rounded-xl p-6 text-left w-full border border-white/10">
-              <h3 className="text-xl font-semibold mb-3 text-[#ffd580] flex items-center gap-2">
-                <i className="bx bxs-book-content"></i> Game Rules
-              </h3>
-
-              <ul className="text-sm md:text-base text-gray-200 space-y-2 list-disc list-inside font-light">
-                {/* Rule 1 */}
-                <li className="flex items-start gap-3">
-                  <i className="bx bxs-user-badge text-[#f3961c] mt-1 shrink-0"></i>
-                  <span>
-                    ทุกคนจะได้รับบทบาท{" "}
-                    <strong className="text-blue-400">GM</strong>,{" "}
-                    <strong className="text-green-300">
-                      ชาวบ้าน (Commons)
-                    </strong>{" "}
-                    หรือ <strong className="text-red-400">Insider</strong>
-                  </span>
-                </li>
-
-                {/* Rule 2 */}
-                <li className="flex items-start gap-3">
-                  <i className="bx bxs-message-dots text-[#f3961c] mt-1 shrink-0"></i>
-                  <span>
-                    ผู้เล่นทุกคน (ยกเว้น{" "}
-                    <strong className="text-blue-400">GM</strong>)
-                    ต้องช่วยกันถามคำถาม{" "}
-                    <strong className="text-green-300">ใช่</strong> หรือ{" "}
-                    <strong className="text-red-400">ไม่ใช่</strong>{" "}
-                    เพื่อหา{" "}
-                    <strong className=" text-fuchsia-400">คำปริศนา (Riddle)</strong>
-                  </span>
-                </li>
-
-                {/* Rule 3 */}
-                <li className="flex items-start gap-3">
-                  <i className="bx bxs-mask text-[#f3961c] mt-1 shrink-0"></i>
-                  <span>
-                    <strong className="text-red-400">Insider</strong> จะรู้คำตอบ
-                    และต้องเนียนชักนำทุกคนให้ทายถูก โดยไม่ให้โดนจับได้
-                  </span>
-                </li>
-
-                {/* Rule 4 (Win Condition) */}
-                <li className="flex items-start gap-3">
-                  <i className="bx bxs-trophy text-[#f3961c] mt-1 shrink-0"></i>
-                  <span>
-                    <strong className="text-white">เงื่อนไขชนะ:</strong> เมื่อเกมจบโหวตว่าใครคือ  <strong className="text-red-400">Insider!!</strong>
-                    <ul className="list-disc list-inside pl-1 mt-1 text-gray-400 text-sm">
-                      <li>ถ้าทายถูก: ชาวบ้านชนะ - Insider แพ้</li>
-                      <li>ถ้าทายผิด: ชาวบ้านแพ้ - Insider ชนะ</li>
-                    </ul>
-                  </span>
-                </li>
-              </ul>
+                <ul className="space-y-6 text-gray-200 font-light text-sm md:text-base pr-2">
+                  <li className="flex items-start gap-3">
+                    <i className="bx bxs-shuffle text-[#f3961c] mt-1 shrink-0 text-xl"></i>
+                    <span>
+                      <strong className="text-white block mb-1 text-lg">
+                        Random Roles
+                      </strong>
+                      Everyone receives a random role:{" "}
+                      <strong className="text-amber-300">Master</strong>,{" "}
+                      <strong className="text-red-400">Insider</strong>, or{" "}
+                      <strong className="text-green-300">Commons</strong>.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <i className="bx bxs-user-search text-[#f3961c] mt-1 shrink-0 text-xl"></i>
+                    <span>
+                      <strong className="text-white block mb-1 text-lg">
+                        Who is who?
+                      </strong>
+                      Everyone knows the{" "}
+                      <strong className="text-amber-300">Master</strong>, but
+                      the <strong className="text-red-400">Insider</strong> is
+                      secret.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <i className="bx  bxs-message-bubble-question-mark text-[#f3961c] mt-1 shrink-0 text-xl"></i>
+                    <span>
+                      <strong className="text-white block mb-1 text-lg">
+                        Find the Riddle
+                      </strong>
+                      The <strong className="text-amber-300">Master</strong>{" "}
+                      answers "Yes/No".{" "}
+                      <strong className="text-green-300">Everyone else</strong>{" "}
+                      ask questions to find the secret word.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <i className="bx bxs-mask text-[#f3961c] mt-1 shrink-0 text-xl"></i>
+                    <span>
+                      <strong className="text-white block mb-1 text-lg">
+                        The Insider
+                      </strong>
+                      Knows the secret! They must guide others without being
+                      caught.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3 border-t border-white/20 pt-4">
+                    <i className="bx bxs-trophy text-[#f3961c] mt-1 shrink-0 text-xl"></i>
+                    <div>
+                      <strong className="text-white block mb-1 text-lg">
+                        Win Condition
+                      </strong>
+                      After finding the word, vote for the Insider!
+                      <ul className="list-disc list-inside mt-2 text-gray-300 space-y-1 ml-1">
+                        <li>
+                          Catch Insider:{" "}
+                          <strong className="text-green-300">Commons</strong>{" "}
+                          Win
+                        </li>
+                        <li>
+                          Fail to catch:{" "}
+                          <strong className="text-red-400">Insider</strong> Wins
+                        </li>
+                      </ul>
+                      <p className="text-xs2 text-gray-400 mt-2 italic">
+                        *If time runs out, everyone loses.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            {/* Player Name */}
-            <div className="w-full">
-              <label className="block text-left text-sm font-light mb-1 ml-1 text-gray-300">
-                Your Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter your nickname..."
-                className="w-full bg-black/20 border border-white/30 rounded-full px-5 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#f3961c] transition-all"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-              />
-            </div>
+            {/* --- RIGHT COLUMN: UI --- */}
+            <div className="flex flex-col justify-center items-center text-center space-y-8 py-4">
+              <div className="space-y-2">
+                <h1 className="text-6xl md:text-7xl font-extrabold text-[#f3961c] drop-shadow-xl tracking-wider">
+                  INSIDER
+                </h1>
+                <p className="text-gray-300 text-lg font-light">
+                  Find the truth. Expose the liar.
+                </p>
+              </div>
 
-            <div className="w-full border-t border-white/10 my-2"></div>
-
-            {/* Create Join btn */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              {/* Create */}
-              <button
-                onClick={handleCreateRoom}
-                className="bg-linear-to-r from-[#f3961c] to-[#d88210] hover:scale-105 transition-transform py-3 rounded-2xl font-bold shadow-lg flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <i className="bx bxs-plus-square"></i> Create Room
-              </button>
-
-              {/* Join */}
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
+              {/* Nickname Input */}
+              <div className="w-full max-w-md space-y-2">
+                <label className="block text-left text-sm font-light ml-2 text-gray-300">
+                  YOUR NICKNAME
+                </label>
+                <div className="relative">
                   <input
                     type="text"
-                    placeholder="Room Code"
-                    className="grow bg-white/10 border border-white/30 rounded-xl px-4 py-2 text-center tracking-widest uppercase placeholder-gray-400 focus:outline-none"
-                    maxLength={6}
-                    value={joinCode}
-                    onChange={(e) => setJoinCode(e.target.value)}
+                    placeholder="Enter name..."
+                    className="w-full bg-black/30 border-2 border-white/20 rounded-2xl px-6 py-4 text-white text-lg placeholder-gray-500 focus:outline-none focus:border-[#f3961c] focus:bg-black/50 transition-all shadow-lg"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
                   />
-                  <button
-                    onClick={handleJoinRoom}
-                    className="bg-white/20 hover:bg-white/30 px-4 rounded-xl transition-colors font-semibold cursor-pointer"
-                  >
-                    JOIN
-                  </button>
+                  <i className="bx bxs-user absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
                 </div>
+              </div>
+
+              <div className="w-full max-w-md border-t border-white/10"></div>
+
+              {/* --- ACTION BUTTONS AREA --- */}
+              <div className="w-full max-w-md grid grid-cols-1 gap-4 min-h-[140px]">
+                {/* STATE: DEFAULT MENU */}
+                {menuState === "default" && (
+                  <div className="grid gap-4 animate-fade-in">
+                    {/* Create Lobby */}
+                    <button
+                      onClick={handleCreateLobby}
+                      className="group relative w-full bg-linear-to-r from-[#f3961c] to-[#d88210] hover:brightness-110 py-4 rounded-2xl font-bold text-xl shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center justify-center gap-3">
+                        <i className="bx bxs-plus-square text-2xl"></i> CREATE
+                        LOBBY
+                      </span>
+                      <div className="absolute inset-0 bg-[#f3961c] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </button>
+
+                    <div className="flex gap-3">
+                      {/* Leave / Back Button */}
+                      <Link
+                        to="/games"
+                        className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-red-400/50 hover:text-red-300 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 text-gray-400"
+                      >
+                        LEAVE
+                      </Link>
+
+                      {/* Join with Code Button */}
+                      <button
+                        onClick={() => setMenuState("join")}
+                        className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-green-400/50 hover:text-green-300 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2 text-gray-400"
+                      >
+                        JOIN WITH CODE <i className="bx bxs-key text-2xl"></i>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                
+
+                {/* STATE: JOIN WITH CODE */}
+                {menuState === "join" && (
+                  <div className="grid gap-4 animate-fade-in">
+                    {/* Code Input */}
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="ENTER LOBBY CODE"
+                        className="w-full bg-white/10 border-2 border-[#f3961c]/50 rounded-2xl px-4 py-4 text-center tracking-widest uppercase font-mono text-xl placeholder-gray-500 focus:outline-none focus:border-[#f3961c] transition-all shadow-inner"
+                        maxLength={6}
+                        value={joinCode}
+                        onChange={(e) => setJoinCode(e.target.value)}
+                        autoFocus
+                      />
+                    </div>
+
+                    <div className="flex gap-3">
+                      {/* Back to Menu Button */}
+                      <button
+                        onClick={() => setMenuState("default")}
+                        className="w-1/3 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/30 rounded-2xl font-bold text-lg transition-all cursor-pointer flex items-center justify-center gap-2 text-gray-400 hover:text-white"
+                      >
+                        <i className="bx bx-undo text-xl"></i> BACK
+                      </button>
+
+                      {/* Confirm Join Button */}
+                      <button
+                        onClick={handleJoinLobby}
+                        className="w-2/3 bg-linear-to-r from-[#f3961c] to-[#d88210] hover:brightness-110 border-2 border-transparent rounded-2xl font-bold text-lg transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg hover:-translate-y-1 active:scale-95"
+                      >
+                        JOIN LOBBY{" "}
+                        <i className="bx bxs-right-arrow-circle text-xl"></i>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         )}
 
-        {/* Lobby View */}
+        {/* --- LOBBY VIEW --- */}
         {view === "lobby" && (
-          <div className="flex flex-col items-center text-center space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-white" Lobby></h2>
-              <div className="bg-black/30 px-6 py-2 rounded-lg border border-[#f3961c]/50 inline-block">
-                <span className="text-gray-400 text-sm mr-2">ROOM CODE:</span>
-                <span className="text-2xl font-mono text-[#f3961c] tracking-widest font-bold">
+          <div className="flex flex-col items-center justify-center text-center space-y-8 grow animate-fade-in">
+            <div className="space-y-3">
+              <h2 className="text-4xl font-bold text-white tracking-wide">
+                WAITING LOBBY
+              </h2>
+              <div className="bg-black/40 px-8 py-4 rounded-2xl border-2 border-[#f3961c] inline-block shadow-[0_0_15px_rgba(243,150,28,0.3)]">
+                <span className="text-gray-400 text-sm block mb-1 tracking-widest">
+                  LOBBY CODE
+                </span>
+                <span className="text-4xl font-mono text-[#f3961c] font-black tracking-[0.2em]">
                   {roomCode}
                 </span>
               </div>
             </div>
 
-            {/* Playerlist */}
-            <div className="w-full bg-white/5 rounded-2xl p-6 min-h-[200px]">
-              <h3 className="text-left text-gray-300 mb-4 border-b border-white/10 pb-2">
-                Players{" "}
-                <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-2">
-                  1/8
+            {/* Player List */}
+            <div className="w-full max-w-3xl bg-white/5 rounded-3xl p-8 min-h-[250px] border border-white/10">
+              <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-6">
+                <h3 className="text-2xl text-gray-200 font-semibold flex items-center gap-2">
+                  <i className="bx bxs-group"></i> Players
+                </h3>
+                <span className="text-sm bg-[#f3961c] text-white px-3 py-1 rounded-full font-bold shadow-md">
+                  1 / 8
                 </span>
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                <div className="flex items-center gap-2 bg-[#f3961c]/80 px-4 py-2 rounded-full shadow-md animate-fade-in">
-                  <i className="bx bxs-user-circle text-xl"></i>
-                  <span className="font-medium">{playerName}</span>
-                  <span className="text-xs bg-black/20 px-1.5 rounded ml-1">
-                    YOU
-                  </span>
-                </div>
+              </div>
 
-                {/* Placeholder for other players */}
-                {/* <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-gray-300">
-                  <i className='bx bx-user-circle text-xl'></i>
-                  <span>Waiting...</span>
-                </div> */}
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-3 bg-linear-to-br from-[#f3961c] to-[#b36b0e] px-6 py-3 rounded-2xl shadow-lg animate-fade-in border border-white/20">
+                  <div>
+                    <i className="bx bxs-user text-2xl text-white mt-1"></i>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="font-bold text-lg leading-tight">
+                      {playerName}
+                    </span>
+                    <span className="text-[10px] bg-black/30 px-1.5 rounded text-white/80">
+                      HOST (YOU)
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Start / Leave btn */}
-            <div className="flex gap-4 w-full">
+            {/* Footer Buttons */}
+            <div className="flex gap-4 w-full max-w-3xl mt-auto">
               <button
                 onClick={() => setView("menu")}
-                className="flex-1 bg-red-500/20 hover:bg-red-500/40 text-red-200 py-3 rounded-full transition-colors cursor-pointer"
+                className="flex-1 bg-white-500/10 border-white/50 hover:bg-red-500/20 border hover:border-red-500/30 text-white hover:text-red-500/30 py-4 rounded-2xl transition-all cursor-pointer font-semibold hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]"
               >
-                Leave Rooom
+                LEAVE LOBBY
               </button>
-              <button className="flex-2 bg-[#f3961c] hover:bg-[#d88210] hover:scale-105 text-white font-bold py-3 rounded-full shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2">
+              <button className="flex-2 bg-linear-to-r from-[#f3961c] to-[#d88210] hover:scale-[1.02] text-white font-bold py-4 rounded-2xl shadow-xl transition-all cursor-pointer flex items-center justify-center gap-3 text-xl">
                 <i className="bx bxs-game"></i> START GAME
               </button>
             </div>

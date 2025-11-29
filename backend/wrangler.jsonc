@@ -1,0 +1,19 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "backend",
+	"main": "src/index.js",
+	"compatibility_date": "2025-11-28",
+	"observability": {
+		"enabled": true
+	},
+	
+	"compatibility_flags": [ "nodejs_compat" ],
+
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "cozy-db",
+			"database_id": "270b5b85-09fa-4964-a2c9-d03b8d3a063e"
+		}
+	]
+}

@@ -1,51 +1,81 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-/**
- * Component for Modal Signin Form
- * @param {object} props
- * @param {boolean} props.isVisible
- * @param {function} props.onClose
- */
+const API_URL = import.meta.env.VITE_API_URL;
 
-const SigninModal = ({ isVisible, onClose }) => {
-  // Switching mode
+const SigninModal = ({ isVisible, onClose, onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [isRegister, setIsRegister] = useState(false);
 
-  // State Password
+  // State เUser Data
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordValue, setPasswordValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // State Confirmation
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
-
-  useEffect(() => {
-    if (isVisible) {
-      document.body.style.overflow = "hidden"; // Scroll lock
-    } else {
-      document.body.style.overflow = "auto"; // Scroll unlock
-    }
-
-    // Cleanup function
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isVisible]);
-
+  // Reset Form
   useEffect(() => {
     if (!isVisible) {
       setIsRegister(false);
-      setPasswordValue("");
-      setConfirmPasswordValue("");
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
       setShowPassword(false);
-      setShowConfirmPassword(false);
     }
   }, [isVisible]);
+
+  // API -> Cloudflare Backend
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Validation
+    if (isRegister && password !== confirmPassword) {
+      alert("Passwords do not match!");
+      setIsLoading(false);
+      return;
+    }
+
+    const endpoint = isRegister ? "/register" : "/login";
+
+    try {
+      console.log(`Sending request to ${API_URL}${endpoint}...`);
+
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (!isRegister) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+
+          if (onLoginSuccess) onLoginSuccess(data.user);
+        } else {
+          alert("Registration Successful! Please Login.");
+          setIsRegister(false);
+        }
+      }
+    } catch (error) {
+      console.error("Connection Error:", error);
+      alert("Cannot connect to server. Make sure Backend is running!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getIconClass = (val, show) => {
     if (val.length === 0) return "bxs-lock";
     return show ? "bxs-eye-alt" : "bxs-eye-slash";
   };
+
+  if (!isVisible) return null;
 
   return (
     <div id="signin-modal-backdrop" className={isVisible ? "is-visible" : ""}>
@@ -53,38 +83,38 @@ const SigninModal = ({ isVisible, onClose }) => {
         <span className="icon-close" onClick={onClose}>
           <i className="bx bxs-x"></i>
         </span>
-        <form action="">
+
+        <form onSubmit={handleAuth}>
           <h1>{isRegister ? "Register" : "Sign In"}</h1>
 
-          {/* Username Input */}
           <div className="input-box">
-            <input type="text" placeholder="Username" required />
+            <input
+              type="text"
+              placeholder="Username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <i className="bx bxs-user"></i>
           </div>
 
           {/* Password Input */}
           <div className="input-box">
             <input
-              type={
-                showPassword && passwordValue.length > 0 ? "text" : "password"
-              }
+              type={showPassword && password.length > 0 ? "text" : "password"}
               placeholder="Password"
               required
-              value={passwordValue}
+              value={password}
               onChange={(e) => {
-                setPasswordValue(e.target.value);
+                setPassword(e.target.value);
                 if (e.target.value.length === 0) setShowPassword(false);
               }}
             />
             <i
-              className={`bx ${getIconClass(passwordValue, showPassword)}`}
-              style={{
-                cursor: passwordValue.length > 0 ? "pointer" : "default",
-              }}
+              className={`bx ${getIconClass(password, showPassword)}`}
+              style={{ cursor: password.length > 0 ? "pointer" : "default" }}
               onClick={() => {
-                if (passwordValue.length > 0) {
-                  setShowPassword(!showPassword);
-                }
+                if (password.length > 0) setShowPassword(!showPassword);
               }}
             ></i>
           </div>
@@ -92,38 +122,16 @@ const SigninModal = ({ isVisible, onClose }) => {
           {isRegister && (
             <div className="input-box">
               <input
-                type={
-                  showConfirmPassword && confirmPasswordValue.length > 0
-                    ? "text"
-                    : "password"
-                }
+                type={showPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 required
-                value={confirmPasswordValue}
-                onChange={(e) => {
-                  setConfirmPasswordValue(e.target.value);
-                  if (e.target.value.length === 0)
-                    setShowConfirmPassword(false);
-                }}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <i
-                className={`bx ${getIconClass(
-                  confirmPasswordValue,
-                  showConfirmPassword
-                )}`}
-                style={{
-                  cursor:
-                    confirmPasswordValue.length > 0 ? "pointer" : "default",
-                }}
-                onClick={() => {
-                  if (confirmPasswordValue.length > 0)
-                    setShowConfirmPassword(!showConfirmPassword);
-                }}
-              ></i>
+              <i className="bx bxs-lock-alt"></i>
             </div>
           )}
 
-          {/* Remember Me & Forgot Password */}
           {!isRegister && (
             <div className="remember-forgot flex justify-between text-sm my-4">
               <label>
@@ -136,10 +144,15 @@ const SigninModal = ({ isVisible, onClose }) => {
           <button
             type="submit"
             className="btn"
-            style={{ marginTop: isRegister ? "20px" : "0" }}
+            style={{
+              marginTop: isRegister ? "20px" : "0",
+              opacity: isLoading ? 0.7 : 1,
+            }}
+            disabled={isLoading}
           >
-            {isRegister ? "Register" : "Sign In"}
+            {isLoading ? "Loading..." : isRegister ? "Register" : "Sign In"}
           </button>
+
           <div className="register-link">
             <p>
               {isRegister
@@ -150,8 +163,8 @@ const SigninModal = ({ isVisible, onClose }) => {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsRegister(!isRegister);
-                  setPasswordValue("");
-                  setConfirmPasswordValue("");
+                  setPassword("");
+                  setConfirmPassword("");
                 }}
               >
                 {isRegister ? "Sign In" : "Register"}

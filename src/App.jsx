@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Hero from "./components/Hero";
 import Contact from "./components/Contact";
@@ -43,7 +43,7 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div>
         <Navbar user={user} onSigninClick={openModal} />
         <Routes>
@@ -67,7 +67,7 @@ const App = () => {
           onLoginSuccess={handleLoginSuccess}
         />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
